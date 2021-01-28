@@ -1,27 +1,886 @@
-parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcelRequire,u="function"==typeof require&&require;function f(t,n){if(!r[t]){if(!e[t]){var i="function"==typeof parcelRequire&&parcelRequire;if(!n&&i)return i(t,!0);if(o)return o(t,!0);if(u&&"string"==typeof t)return u(t);var c=new Error("Cannot find module '"+t+"'");throw c.code="MODULE_NOT_FOUND",c}p.resolve=function(r){return e[t][1][r]||r},p.cache={};var l=r[t]=new f.Module(t);e[t][0].call(l.exports,p,l,l.exports,this)}return r[t].exports;function p(e){return f(p.resolve(e))}}f.isParcelRequire=!0,f.Module=function(e){this.id=e,this.bundle=f,this.exports={}},f.modules=e,f.cache=r,f.parent=o,f.register=function(r,t){e[r]=[function(e,r){r.exports=t},{}]};for(var c=0;c<t.length;c++)try{f(t[c])}catch(e){i||(i=e)}if(t.length){var l=f(t[t.length-1]);"object"==typeof exports&&"undefined"!=typeof module?module.exports=l:"function"==typeof define&&define.amd?define(function(){return l}):n&&(this[n]=l)}if(parcelRequire=f,i)throw i;return f}({"NmBf":[function(require,module,exports) {
-"use strict";function e(e,t){return-1!==e.indexOf(t)}function t(e,t){return e.filter(function(e){return e!==t})}Object.defineProperty(exports,"__esModule",{value:!0}),exports.isDataExists=e,exports.removeItem=t;
+// modules are defined as an array
+// [ module function, map of requires ]
+//
+// map of requires is short require name -> numeric require
+//
+// anything defined in a previous bundle is accessed via the
+// orig method which is the require for previous bundles
+parcelRequire = (function (modules, cache, entry, globalName) {
+  // Save the require from previous bundle to this closure if any
+  var previousRequire = typeof parcelRequire === 'function' && parcelRequire;
+  var nodeRequire = typeof require === 'function' && require;
+
+  function newRequire(name, jumped) {
+    if (!cache[name]) {
+      if (!modules[name]) {
+        // if we cannot find the module within our internal map or
+        // cache jump to the current global require ie. the last bundle
+        // that was added to the page.
+        var currentRequire = typeof parcelRequire === 'function' && parcelRequire;
+        if (!jumped && currentRequire) {
+          return currentRequire(name, true);
+        }
+
+        // If there are other bundles on this page the require from the
+        // previous one is saved to 'previousRequire'. Repeat this as
+        // many times as there are bundles until the module is found or
+        // we exhaust the require chain.
+        if (previousRequire) {
+          return previousRequire(name, true);
+        }
+
+        // Try the node require function if it exists.
+        if (nodeRequire && typeof name === 'string') {
+          return nodeRequire(name);
+        }
+
+        var err = new Error('Cannot find module \'' + name + '\'');
+        err.code = 'MODULE_NOT_FOUND';
+        throw err;
+      }
+
+      localRequire.resolve = resolve;
+      localRequire.cache = {};
+
+      var module = cache[name] = new newRequire.Module(name);
+
+      modules[name][0].call(module.exports, localRequire, module, module.exports, this);
+    }
+
+    return cache[name].exports;
+
+    function localRequire(x){
+      return newRequire(localRequire.resolve(x));
+    }
+
+    function resolve(x){
+      return modules[name][1][x] || x;
+    }
+  }
+
+  function Module(moduleName) {
+    this.id = moduleName;
+    this.bundle = newRequire;
+    this.exports = {};
+  }
+
+  newRequire.isParcelRequire = true;
+  newRequire.Module = Module;
+  newRequire.modules = modules;
+  newRequire.cache = cache;
+  newRequire.parent = previousRequire;
+  newRequire.register = function (id, exports) {
+    modules[id] = [function (require, module) {
+      module.exports = exports;
+    }, {}];
+  };
+
+  var error;
+  for (var i = 0; i < entry.length; i++) {
+    try {
+      newRequire(entry[i]);
+    } catch (e) {
+      // Save first error but execute all entries
+      if (!error) {
+        error = e;
+      }
+    }
+  }
+
+  if (entry.length) {
+    // Expose entry point to Node, AMD or browser globals
+    // Based on https://github.com/ForbesLindesay/umd/blob/master/template.js
+    var mainExports = newRequire(entry[entry.length - 1]);
+
+    // CommonJS
+    if (typeof exports === "object" && typeof module !== "undefined") {
+      module.exports = mainExports;
+
+    // RequireJS
+    } else if (typeof define === "function" && define.amd) {
+     define(function () {
+       return mainExports;
+     });
+
+    // <script>
+    } else if (globalName) {
+      this[globalName] = mainExports;
+    }
+  }
+
+  // Override the current require with this new one
+  parcelRequire = newRequire;
+
+  if (error) {
+    // throw error from earlier, _after updating parcelRequire_
+    throw error;
+  }
+
+  return newRequire;
+})({"NmBf":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.isDataExists = isDataExists;
+exports.removeItem = removeItem;
+
+/**
+ * Check element exists inside array
+ * @param {array} array
+ * @param {any} element
+ */
+function isDataExists(array, element) {
+  return array.indexOf(element) !== -1;
+}
+/**
+ * Remove an element inside array
+ * @param {array} array
+ * @param {any} value
+ */
+
+
+function removeItem(array, value) {
+  return array.filter(function (item) {
+    return item !== value;
+  });
+}
 },{}],"Vk9b":[function(require,module,exports) {
-"use strict";function t(r){return(t="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t})(r)}Object.defineProperty(exports,"__esModule",{value:!0}),exports.getObjectPropertyByValue=exports.getObjectProperty=exports.convertToArray=exports.isObject=void 0;var r=function(r){return r&&"object"===t(r)&&r.constructor===Object};exports.isObject=r;var e=function(t){if(t){if(r(t)){var e=[];return Object.keys(t).map(function(r){return e[r]=t[r],!0}),e}return t}return[]};exports.convertToArray=e;var o=function(t,r){return Object.prototype.hasOwnProperty.call(t,r)?Object.assign(t)[r]:null};exports.getObjectProperty=o;var n=function(t,r){var e="";return Object.keys(r).map(function(o){return r[o]===t&&(e=o),!0}),e};exports.getObjectPropertyByValue=n;
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getObjectPropertyByValue = exports.getObjectProperty = exports.convertToArray = exports.isObject = void 0;
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+/* eslint-disable import/prefer-default-export */
+
+/**
+ * Check is object or not
+ * @param {object} value
+ */
+var isObject = function isObject(value) {
+  return value && _typeof(value) === 'object' && value.constructor === Object;
+};
+/**
+ * Convert the array to the object
+ * @param {object} object
+ */
+
+
+exports.isObject = isObject;
+
+var convertToArray = function convertToArray(object) {
+  if (object) {
+    if (isObject(object)) {
+      var data = [];
+      Object.keys(object).map(function (key) {
+        data[key] = object[key];
+        return true;
+      });
+      return data;
+    }
+
+    return object;
+  }
+
+  return [];
+};
+/**
+ * Get property from object
+ * @param {object} obj
+ * @param {strin} key
+ */
+
+
+exports.convertToArray = convertToArray;
+
+var getObjectProperty = function getObjectProperty(obj, key) {
+  var value = Object.prototype.hasOwnProperty.call(obj, key) ? Object.assign(obj)[key] : null;
+  return value;
+};
+/**
+ * Get object's property by value
+ * @param {string} value
+ * @param {object} object
+ */
+
+
+exports.getObjectProperty = getObjectProperty;
+
+var getObjectPropertyByValue = function getObjectPropertyByValue(value, object) {
+  var output = '';
+  Object.keys(object).map(function (key) {
+    if (object[key] === value) {
+      output = key;
+    }
+
+    return true;
+  });
+  return output;
+};
+
+exports.getObjectPropertyByValue = getObjectPropertyByValue;
 },{}],"EYbI":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.generateString=void 0;var e=function(e,r){for(var t="",n=0;n<r;n+=1)t+=e;return t};exports.generateString=e;
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.generateString = void 0;
+
+/* eslint-disable import/prefer-default-export */
+var generateString = function generateString(string, number) {
+  var stringOutput = '';
+
+  for (var i = 0; i < number; i += 1) {
+    stringOutput += string;
+  }
+
+  return stringOutput;
+};
+
+exports.generateString = generateString;
 },{}],"gcXW":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.getCurrentTime=void 0;var e=function(e){var r=e||!1,t=new Date;if(r){var a=t.getHours();return{hour:a,minute:t.getMinutes(),second:t.getSeconds(),section:a>=12?"pm":"am",weekday:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][t.getDay()],month:["January","February","March","April","May","June","July","August","September","October","November","December"][t.getMonth()],day:t.getDate(),year:t.getFullYear()}}return t};exports.getCurrentTime=e;
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getCurrentTime = void 0;
+
+/* eslint-disable import/prefer-default-export */
+
+/**
+ * Get current time
+ * @param {boolean} isShowDetail
+ */
+var getCurrentTime = function getCurrentTime(isShowDetail) {
+  var isShowDetailState = isShowDetail || false;
+  var currentTime = new Date();
+
+  if (isShowDetailState) {
+    var weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    var hour = currentTime.getHours();
+    var minute = currentTime.getMinutes();
+    var second = currentTime.getSeconds();
+    var section = hour >= 12 ? 'pm' : 'am';
+    var weekday = weekdays[currentTime.getDay()];
+    var month = months[currentTime.getMonth()];
+    var day = currentTime.getDate();
+    var year = currentTime.getFullYear();
+    return {
+      hour: hour,
+      minute: minute,
+      second: second,
+      section: section,
+      weekday: weekday,
+      month: month,
+      day: day,
+      year: year
+    };
+  }
+
+  return currentTime;
+};
+
+exports.getCurrentTime = getCurrentTime;
 },{}],"ly4K":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.moneyFormat=exports.randomNumber=exports.handleSingular=exports.paddingZero=exports.toNumber=void 0;var r=function(r){return parseInt(r,10)};exports.toNumber=r;var o=function(r,o){for(var t="".concat(r);t.length<(o||2);)t="0".concat(t);return t};exports.paddingZero=o;var t=function(r,o){return r>1?"".concat(r," ").concat(o,"s"):"".concat(r," ").concat(o)};exports.handleSingular=t;var e=function(r,o){return Math.floor(Math.random()*o)+r};exports.randomNumber=e;var n=function(r,o){return"".concat(r).replace(/\B(?=(\d{3})+(?!\d))/g,o)};exports.moneyFormat=n;
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.moneyFormat = exports.randomNumber = exports.handleSingular = exports.paddingZero = exports.toNumber = void 0;
+
+/**
+ * Convert the numver with string type to number
+ * @param {string} numberWithStringType
+ */
+var toNumber = function toNumber(numberWithStringType) {
+  return parseInt(numberWithStringType, 10);
+};
+/**
+ * Padding the zero to the number
+ * @param {number} number
+ * @param {number} length
+ */
+
+
+exports.toNumber = toNumber;
+
+var paddingZero = function paddingZero(number, length) {
+  var s = "".concat(number);
+
+  while (s.length < (length || 2)) {
+    s = "0".concat(s);
+  }
+
+  return s;
+};
+/**
+ * Handle add "s" for the singular number
+ * @param {number} number
+ * @param {string} string
+ */
+
+
+exports.paddingZero = paddingZero;
+
+var handleSingular = function handleSingular(number, string) {
+  return number > 1 ? "".concat(number, " ").concat(string, "s") : "".concat(number, " ").concat(string);
+};
+/**
+ * Random number between specific range
+ * @param {number} start
+ * @param {number} end
+ */
+
+
+exports.handleSingular = handleSingular;
+
+var randomNumber = function randomNumber(start, end) {
+  return Math.floor(Math.random() * end) + start;
+};
+/**
+ * Format money type
+ * @param {number} number
+ * @param {string} string
+ */
+
+
+exports.randomNumber = randomNumber;
+
+var moneyFormat = function moneyFormat(number, string) {
+  var format = /\B(?=(\d{3})+(?!\d))/g;
+  return "".concat(number).replace(format, string);
+};
+
+exports.moneyFormat = moneyFormat;
 },{}],"HMUh":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.getParamInURL=void 0;var e=function(e,r){return new URL(e).searchParams.get(r)};exports.getParamInURL=e;
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getParamInURL = void 0;
+
+/* eslint-disable import/prefer-default-export */
+
+/**
+ * Get param in the url
+ * @param {string} url
+ * @param {string} item
+ */
+var getParamInURL = function getParamInURL(url, item) {
+  return new URL(url).searchParams.get(item);
+};
+
+exports.getParamInURL = getParamInURL;
 },{}],"fRxd":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.qsAll=s,exports.isClassExists=t,exports.addClass=r,exports.removeClass=o,exports.qs=void 0;var e=function(e){return document.querySelector(e)};function s(e){return document.querySelectorAll(e)}function t(e,s){return e.classList.contains(s)}function r(e,s){return e.classList.add(s)}function o(e,s){return e.classList.remove(s)}exports.qs=e;
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.qsAll = qsAll;
+exports.isClassExists = isClassExists;
+exports.addClass = addClass;
+exports.removeClass = removeClass;
+exports.qs = void 0;
+
+/**
+ * Short hand for query selector
+ * @param {string} selector
+ */
+var qs = function qs(selector) {
+  return document.querySelector(selector);
+};
+/**
+ * Short hand for queryselector all
+ * @param {string} selector
+ */
+
+
+exports.qs = qs;
+
+function qsAll(selector) {
+  return document.querySelectorAll(selector);
+}
+/**
+ * Check class exists inside the DOM
+ * @param {DOM} params
+ */
+
+
+function isClassExists(element, containClass) {
+  return element.classList.contains(containClass);
+}
+/**
+ * Add class in to element
+ * @param {DOM} element
+ * @param {string} classAdd
+ */
+
+
+function addClass(element, classAdd) {
+  return element.classList.add(classAdd);
+}
+/**
+ * Rmeove class form element
+ * @param {DOM} element
+ * @param {string} classAdd
+ */
+
+
+function removeClass(element, classAdd) {
+  return element.classList.remove(classAdd);
+}
 },{}],"vktu":[function(require,module,exports) {
-"use strict";function t(t){return o(t)||n(t)||e(t)||r()}function r(){throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}function e(t,r){if(t){if("string"==typeof t)return a(t,r);var e=Object.prototype.toString.call(t).slice(8,-1);return"Object"===e&&t.constructor&&(e=t.constructor.name),"Map"===e||"Set"===e?Array.from(t):"Arguments"===e||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(e)?a(t,r):void 0}}function n(t){if("undefined"!=typeof Symbol&&Symbol.iterator in Object(t))return Array.from(t)}function o(t){if(Array.isArray(t))return a(t)}function a(t,r){(null==r||r>t.length)&&(r=t.length);for(var e=0,n=new Array(r);e<r;e++)n[e]=t[e];return n}Object.defineProperty(exports,"__esModule",{value:!0}),exports.pagination=void 0;var i=function(r,e){var n=t(e),o={},a=new Array(Math.ceil(n.length/r)).fill().map(function(){return n.splice(0,r)});return a.forEach(function(t,r){o[r+1]=t}),{numberOfPage:a.length,objectPages:o,arrayPages:a,all:e,totalItems:e.length}};exports.pagination=i;
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.pagination = void 0;
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+/* eslint-disable import/prefer-default-export */
+var pagination = function pagination(numberEachPage, dataInput) {
+  var dataClone = _toConsumableArray(dataInput);
+
+  var pagesData = {};
+  var pages = new Array(Math.ceil(dataClone.length / numberEachPage)).fill().map(function () {
+    return dataClone.splice(0, numberEachPage);
+  });
+  pages.forEach(function (page, index) {
+    pagesData[index + 1] = page;
+  });
+  return {
+    numberOfPage: pages.length,
+    objectPages: pagesData,
+    arrayPages: pages,
+    all: dataInput,
+    totalItems: dataInput.length
+  };
+};
+
+exports.pagination = pagination;
 },{}],"i59R":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.XHTTPRequest=void 0;var e=require("./objects"),t=function(t){var s=t.method,a=t.endpoint,n=t.body,r=t.response,o=t.header,u=new XMLHttpRequest;u.open(s,a,!0),o&&(0,e.isObject)(o)&&Object.keys(o).map(function(e){return u.setRequestHeader(e,o[e])}),u.onreadystatechange=function(){4===u.readyState&&(u.status>=200&&u.status<300?r({status:!0,message:"Send request successfully!",data:JSON.parse(u.responseText)}):r({status:!1,message:"Something went wrong!",data:[]}))},u.send(JSON.stringify(n))};exports.XHTTPRequest=t;
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.XHTTPRequest = void 0;
+
+var _objects = require("./objects");
+
+/* eslint-disable import/prefer-default-export */
+var XHTTPRequest = function XHTTPRequest(dataRequest) {
+  var method = dataRequest.method,
+      endpoint = dataRequest.endpoint,
+      body = dataRequest.body,
+      response = dataRequest.response,
+      header = dataRequest.header;
+  var xhttp = new XMLHttpRequest();
+  xhttp.open(method, endpoint, true);
+
+  if (header && (0, _objects.isObject)(header)) {
+    Object.keys(header).map(function (key) {
+      return xhttp.setRequestHeader(key, header[key]);
+    });
+  }
+
+  xhttp.onreadystatechange = function () {
+    if (xhttp.readyState === 4) {
+      if (xhttp.status >= 200 && xhttp.status < 300) {
+        response({
+          status: true,
+          message: 'Send request successfully!',
+          data: JSON.parse(xhttp.responseText)
+        });
+      } else {
+        response({
+          status: false,
+          message: 'Something went wrong!',
+          data: []
+        });
+      }
+    }
+  };
+
+  xhttp.send(JSON.stringify(body));
+};
+
+exports.XHTTPRequest = XHTTPRequest;
 },{"./objects":"Vk9b"}],"RvaL":[function(require,module,exports) {
-"use strict";function t(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function e(t,e){for(var n=0;n<e.length;n++){var r=e[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}function n(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}Object.defineProperty(exports,"__esModule",{value:!0}),exports.getCurrentVersion=void 0;var r=function(){return(new(function(){function e(){t(this,e),this.major=1,this.minor=0,this.patch=0}return n(e,[{key:"getMajor",value:function(){return this.major}},{key:"getMinor",value:function(){return this.minor}},{key:"getPatch",value:function(){return this.patch}},{key:"getFullVersion",value:function(){return"".concat(this.major,".").concat(this.minor,".").concat(this.patch)}},{key:"getVersion",value:function(){return{major:this.getMajor(),minor:this.getMinor(),patch:this.getPatch(),full:this.getFullVersion()}}},{key:"init",value:function(){return this.getVersion()}}]),e}())).init()};exports.getCurrentVersion=r;
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getCurrentVersion = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/* eslint-disable import/prefer-default-export */
+var getCurrentVersion = function getCurrentVersion() {
+  var Version = /*#__PURE__*/function () {
+    function Version() {
+      _classCallCheck(this, Version);
+
+      this.major = 1;
+      this.minor = 0;
+      this.patch = 0;
+    }
+    /**
+     * Get major value
+     */
+
+
+    _createClass(Version, [{
+      key: "getMajor",
+      value: function getMajor() {
+        return this.major;
+      }
+      /**
+       * Get minor value
+       */
+
+    }, {
+      key: "getMinor",
+      value: function getMinor() {
+        return this.minor;
+      }
+      /**
+       * Get Patch value
+       */
+
+    }, {
+      key: "getPatch",
+      value: function getPatch() {
+        return this.patch;
+      }
+      /**
+       * Get full version
+       */
+
+    }, {
+      key: "getFullVersion",
+      value: function getFullVersion() {
+        return "".concat(this.major, ".").concat(this.minor, ".").concat(this.patch);
+      }
+      /**
+       * Get version
+       */
+
+    }, {
+      key: "getVersion",
+      value: function getVersion() {
+        return {
+          major: this.getMajor(),
+          minor: this.getMinor(),
+          patch: this.getPatch(),
+          full: this.getFullVersion()
+        };
+      }
+      /**
+       * Initialize the module
+       */
+
+    }, {
+      key: "init",
+      value: function init() {
+        return this.getVersion();
+      }
+    }]);
+
+    return Version;
+  }();
+
+  return new Version().init();
+};
+
+exports.getCurrentVersion = getCurrentVersion;
 },{}],"IRJd":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.createWaterMark=void 0;var e=function(e){return console.log(e),"This feature is building..."};exports.createWaterMark=e;
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.createWaterMark = void 0;
+
+/* eslint-disable import/prefer-default-export */
+var createWaterMark = function createWaterMark(data) {
+  // eslint-disable-next-line no-console
+  console.log(data);
+  return 'This feature is building...';
+};
+
+exports.createWaterMark = createWaterMark;
 },{}],"iRxa":[function(require,module,exports) {
-"use strict";function e(e,n){if(!(e instanceof n))throw new TypeError("Cannot call a class as a function")}function n(e,n){for(var t=0;t<n.length;t++){var r=n[t];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}function t(e,t,r){return t&&n(e.prototype,t),r&&n(e,r),e}Object.defineProperty(exports,"__esModule",{value:!0}),exports.imageAPI=void 0;var r=function(){return(new(function(){function n(t){e(this,n),this.apiKey=t}return t(n,[{key:"init",value:function(){return{upload:this.upload()}}},{key:"upload",value:function(){return this}}]),n}())).init()};exports.imageAPI=r;
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.imageAPI = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/* eslint-disable import/prefer-default-export */
+var imageAPI = function imageAPI() {
+  var ImageAPI = /*#__PURE__*/function () {
+    function ImageAPI(apiKey) {
+      _classCallCheck(this, ImageAPI);
+
+      this.apiKey = apiKey;
+    }
+
+    _createClass(ImageAPI, [{
+      key: "init",
+      value: function init() {
+        return {
+          upload: this.upload()
+        };
+      }
+    }, {
+      key: "upload",
+      value: function upload() {
+        return this;
+      }
+    }]);
+
+    return ImageAPI;
+  }();
+
+  return new ImageAPI().init();
+};
+
+exports.imageAPI = imageAPI;
 },{}],"Focm":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var e={};exports.default=void 0;var r=b(require("./arrays"));Object.keys(r).forEach(function(t){"default"!==t&&"__esModule"!==t&&(Object.prototype.hasOwnProperty.call(e,t)||t in exports&&exports[t]===r[t]||Object.defineProperty(exports,t,{enumerable:!0,get:function(){return r[t]}}))});var t=b(require("./objects"));Object.keys(t).forEach(function(r){"default"!==r&&"__esModule"!==r&&(Object.prototype.hasOwnProperty.call(e,r)||r in exports&&exports[r]===t[r]||Object.defineProperty(exports,r,{enumerable:!0,get:function(){return t[r]}}))});var o=b(require("./strings"));Object.keys(o).forEach(function(r){"default"!==r&&"__esModule"!==r&&(Object.prototype.hasOwnProperty.call(e,r)||r in exports&&exports[r]===o[r]||Object.defineProperty(exports,r,{enumerable:!0,get:function(){return o[r]}}))});var n=b(require("./datetime"));Object.keys(n).forEach(function(r){"default"!==r&&"__esModule"!==r&&(Object.prototype.hasOwnProperty.call(e,r)||r in exports&&exports[r]===n[r]||Object.defineProperty(exports,r,{enumerable:!0,get:function(){return n[r]}}))});var u=b(require("./numbers"));Object.keys(u).forEach(function(r){"default"!==r&&"__esModule"!==r&&(Object.prototype.hasOwnProperty.call(e,r)||r in exports&&exports[r]===u[r]||Object.defineProperty(exports,r,{enumerable:!0,get:function(){return u[r]}}))});var p=b(require("./urls"));Object.keys(p).forEach(function(r){"default"!==r&&"__esModule"!==r&&(Object.prototype.hasOwnProperty.call(e,r)||r in exports&&exports[r]===p[r]||Object.defineProperty(exports,r,{enumerable:!0,get:function(){return p[r]}}))});var a=b(require("./dom"));Object.keys(a).forEach(function(r){"default"!==r&&"__esModule"!==r&&(Object.prototype.hasOwnProperty.call(e,r)||r in exports&&exports[r]===a[r]||Object.defineProperty(exports,r,{enumerable:!0,get:function(){return a[r]}}))});var c=b(require("./pagination"));Object.keys(c).forEach(function(r){"default"!==r&&"__esModule"!==r&&(Object.prototype.hasOwnProperty.call(e,r)||r in exports&&exports[r]===c[r]||Object.defineProperty(exports,r,{enumerable:!0,get:function(){return c[r]}}))});var s=b(require("./api-request"));Object.keys(s).forEach(function(r){"default"!==r&&"__esModule"!==r&&(Object.prototype.hasOwnProperty.call(e,r)||r in exports&&exports[r]===s[r]||Object.defineProperty(exports,r,{enumerable:!0,get:function(){return s[r]}}))});var i=b(require("./version"));Object.keys(i).forEach(function(r){"default"!==r&&"__esModule"!==r&&(Object.prototype.hasOwnProperty.call(e,r)||r in exports&&exports[r]===i[r]||Object.defineProperty(exports,r,{enumerable:!0,get:function(){return i[r]}}))});var f=b(require("./water-mark"));Object.keys(f).forEach(function(r){"default"!==r&&"__esModule"!==r&&(Object.prototype.hasOwnProperty.call(e,r)||r in exports&&exports[r]===f[r]||Object.defineProperty(exports,r,{enumerable:!0,get:function(){return f[r]}}))});var l=b(require("./image-api"));function d(){if("function"!=typeof WeakMap)return null;var e=new WeakMap;return d=function(){return e},e}function b(e){if(e&&e.__esModule)return e;if(null===e||"object"!=typeof e&&"function"!=typeof e)return{default:e};var r=d();if(r&&r.has(e))return r.get(e);var t={},o=Object.defineProperty&&Object.getOwnPropertyDescriptor;for(var n in e)if(Object.prototype.hasOwnProperty.call(e,n)){var u=o?Object.getOwnPropertyDescriptor(e,n):null;u&&(u.get||u.set)?Object.defineProperty(t,n,u):t[n]=e[n]}return t.default=e,r&&r.set(e,t),t}Object.keys(l).forEach(function(r){"default"!==r&&"__esModule"!==r&&(Object.prototype.hasOwnProperty.call(e,r)||r in exports&&exports[r]===l[r]||Object.defineProperty(exports,r,{enumerable:!0,get:function(){return l[r]}}))});var y=Object.assign(r,t,o,n,u,p,a,c,s,i,f,l);window.Helpers=y,window.addEventListener("DOMContentLoaded",function(){setTimeout(console.log.bind(console,"%c Helpers %c Current version: v".concat(y.getCurrentVersion().full," %c"),"background:#35495e; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff","background:#0170fe; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff","background:transparent"))});var O=y;exports.default=O;
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var _exportNames = {};
+exports.default = void 0;
+
+var ArrayHelpers = _interopRequireWildcard(require("./arrays"));
+
+Object.keys(ArrayHelpers).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  if (key in exports && exports[key] === ArrayHelpers[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return ArrayHelpers[key];
+    }
+  });
+});
+
+var ObjectHelpers = _interopRequireWildcard(require("./objects"));
+
+Object.keys(ObjectHelpers).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  if (key in exports && exports[key] === ObjectHelpers[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return ObjectHelpers[key];
+    }
+  });
+});
+
+var StringHelpers = _interopRequireWildcard(require("./strings"));
+
+Object.keys(StringHelpers).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  if (key in exports && exports[key] === StringHelpers[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return StringHelpers[key];
+    }
+  });
+});
+
+var DateTimeHelpers = _interopRequireWildcard(require("./datetime"));
+
+Object.keys(DateTimeHelpers).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  if (key in exports && exports[key] === DateTimeHelpers[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return DateTimeHelpers[key];
+    }
+  });
+});
+
+var NumberHelpers = _interopRequireWildcard(require("./numbers"));
+
+Object.keys(NumberHelpers).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  if (key in exports && exports[key] === NumberHelpers[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return NumberHelpers[key];
+    }
+  });
+});
+
+var URLHelpers = _interopRequireWildcard(require("./urls"));
+
+Object.keys(URLHelpers).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  if (key in exports && exports[key] === URLHelpers[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return URLHelpers[key];
+    }
+  });
+});
+
+var DOMHelpers = _interopRequireWildcard(require("./dom"));
+
+Object.keys(DOMHelpers).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  if (key in exports && exports[key] === DOMHelpers[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return DOMHelpers[key];
+    }
+  });
+});
+
+var PaginationHelpers = _interopRequireWildcard(require("./pagination"));
+
+Object.keys(PaginationHelpers).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  if (key in exports && exports[key] === PaginationHelpers[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return PaginationHelpers[key];
+    }
+  });
+});
+
+var APIRequestHelpers = _interopRequireWildcard(require("./api-request"));
+
+Object.keys(APIRequestHelpers).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  if (key in exports && exports[key] === APIRequestHelpers[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return APIRequestHelpers[key];
+    }
+  });
+});
+
+var VersionHelpers = _interopRequireWildcard(require("./version"));
+
+Object.keys(VersionHelpers).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  if (key in exports && exports[key] === VersionHelpers[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return VersionHelpers[key];
+    }
+  });
+});
+
+var WaterMarkHelpers = _interopRequireWildcard(require("./water-mark"));
+
+Object.keys(WaterMarkHelpers).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  if (key in exports && exports[key] === WaterMarkHelpers[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return WaterMarkHelpers[key];
+    }
+  });
+});
+
+var ImageAPIHelpers = _interopRequireWildcard(require("./image-api"));
+
+Object.keys(ImageAPIHelpers).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  if (key in exports && exports[key] === ImageAPIHelpers[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return ImageAPIHelpers[key];
+    }
+  });
+});
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+var Helpers = Object.assign(ArrayHelpers, ObjectHelpers, StringHelpers, DateTimeHelpers, NumberHelpers, URLHelpers, DOMHelpers, PaginationHelpers, APIRequestHelpers, VersionHelpers, WaterMarkHelpers, ImageAPIHelpers);
+/**
+ * Export all of functions as global
+ */
+
+window.Helpers = Helpers;
+/**
+ * Handle when DOM loaded
+ */
+
+window.addEventListener('DOMContentLoaded', function () {
+  setTimeout( // eslint-disable-next-line no-console
+  console.log.bind(console, "%c Helpers %c Current version: v".concat(Helpers.getCurrentVersion().full, " %c"), 'background:#35495e; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff', 'background:#0170fe; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff', 'background:transparent'));
+});
+/**
+ * Export module as default
+ */
+
+var _default = Helpers;
+exports.default = _default;
 },{"./arrays":"NmBf","./objects":"Vk9b","./strings":"EYbI","./datetime":"gcXW","./numbers":"ly4K","./urls":"HMUh","./dom":"fRxd","./pagination":"vktu","./api-request":"i59R","./version":"RvaL","./water-mark":"IRJd","./image-api":"iRxa"}]},{},["Focm"], null)
