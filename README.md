@@ -1,6 +1,6 @@
 # Magician Helpers() {
 
-*The fastest code implementation for JavaScript*
+✨*The fastest code implementation for JavaScript*✨
 
 ## Getting Started
 Before we get started, you need to add Magician Helpers to the source. Like if you're building a website, an `index.html` file:
@@ -19,7 +19,7 @@ Before we get started, you need to add Magician Helpers to the source. Like if y
 </html>
 ```
 
-In your JS file, let's do something magical
+In your JS file, let's do something magical:
 
 > JavaScript ES5
 ```js
