@@ -387,11 +387,7 @@ exports.getParamInURL = getParamInURL;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.qsAll = qsAll;
-exports.isClassExists = isClassExists;
-exports.addClass = addClass;
-exports.removeClass = removeClass;
-exports.qs = void 0;
+exports.removeClass = exports.addClass = exports.isClassExists = exports.qsAll = exports.qs = void 0;
 
 /**
  * Short hand for query selector
@@ -408,18 +404,20 @@ var qs = function qs(selector) {
 
 exports.qs = qs;
 
-function qsAll(selector) {
+var qsAll = function qsAll(selector) {
   return document.querySelectorAll(selector);
-}
+};
 /**
  * Check class exists inside the DOM
  * @param {DOM} params
  */
 
 
-function isClassExists(element, containClass) {
+exports.qsAll = qsAll;
+
+var isClassExists = function isClassExists(element, containClass) {
   return element.classList.contains(containClass);
-}
+};
 /**
  * Add class in to element
  * @param {DOM} element
@@ -427,9 +425,11 @@ function isClassExists(element, containClass) {
  */
 
 
-function addClass(element, classAdd) {
-  return element.classList.add(classAdd);
-}
+exports.isClassExists = isClassExists;
+
+var addClass = function addClass(element, className) {
+  return element.classList.add(className);
+};
 /**
  * Rmeove class form element
  * @param {DOM} element
@@ -437,9 +437,13 @@ function addClass(element, classAdd) {
  */
 
 
-function removeClass(element, classAdd) {
-  return element.classList.remove(classAdd);
-}
+exports.addClass = addClass;
+
+var removeClass = function removeClass(element, className) {
+  return element.classList.remove(className);
+};
+
+exports.removeClass = removeClass;
 },{}],"vktu":[function(require,module,exports) {
 "use strict";
 
