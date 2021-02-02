@@ -514,10 +514,18 @@ var XHTTPRequest = function XHTTPRequest(dataRequest) {
   xhttp.onreadystatechange = function () {
     if (xhttp.readyState === 4) {
       if (xhttp.status >= 200 && xhttp.status < 300) {
+        var dataResponse = '';
+
+        try {
+          dataResponse = JSON.parse(xhttp.responseText);
+        } catch (error) {
+          dataResponse = xhttp.responseText;
+        }
+
         response({
           status: true,
           message: 'Send request successfully!',
-          data: JSON.parse(xhttp.responseText)
+          data: dataResponse
         });
       } else {
         response({
@@ -686,6 +694,59 @@ var imageAPI = function imageAPI() {
 };
 
 exports.imageAPI = imageAPI;
+},{}],"exY1":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.slack = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/* eslint-disable import/prefer-default-export */
+var slack = function slack(hook, callback) {
+  var slackCallback = callback || function name() {};
+
+  var Slack = /*#__PURE__*/function () {
+    function Slack() {
+      _classCallCheck(this, Slack);
+    }
+
+    _createClass(Slack, [{
+      key: "send",
+      value: function send(data) {
+        window.Helpers.XHTTPRequest({
+          method: 'POST',
+          endpoint: hook,
+          body: data,
+          response: function response(_response) {
+            slackCallback(_response);
+          },
+          header: {}
+        });
+        return this;
+      }
+    }, {
+      key: "init",
+      value: function init() {
+        return {
+          send: this.send
+        };
+      }
+    }]);
+
+    return Slack;
+  }();
+
+  return new Slack().init();
+};
+
+exports.slack = slack;
 },{}],"Focm":[function(require,module,exports) {
 "use strict";
 
@@ -863,11 +924,25 @@ Object.keys(ImageAPIHelpers).forEach(function (key) {
   });
 });
 
+var Slack = _interopRequireWildcard(require("./slack"));
+
+Object.keys(Slack).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  if (key in exports && exports[key] === Slack[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return Slack[key];
+    }
+  });
+});
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-var Helpers = Object.assign(ArrayHelpers, ObjectHelpers, StringHelpers, DateTimeHelpers, NumberHelpers, URLHelpers, DOMHelpers, PaginationHelpers, APIRequestHelpers, VersionHelpers, WaterMarkHelpers, ImageAPIHelpers);
+var Helpers = Object.assign(ArrayHelpers, ObjectHelpers, StringHelpers, DateTimeHelpers, NumberHelpers, URLHelpers, DOMHelpers, PaginationHelpers, APIRequestHelpers, VersionHelpers, WaterMarkHelpers, ImageAPIHelpers, Slack);
 /**
  * Export all of functions as global
  */
@@ -887,4 +962,4 @@ window.addEventListener('DOMContentLoaded', function () {
 
 var _default = Helpers;
 exports.default = _default;
-},{"./arrays":"NmBf","./objects":"Vk9b","./strings":"EYbI","./datetime":"gcXW","./numbers":"ly4K","./urls":"HMUh","./dom":"fRxd","./pagination":"vktu","./api-request":"i59R","./version":"RvaL","./water-mark":"IRJd","./image-api":"iRxa"}]},{},["Focm"], null)
+},{"./arrays":"NmBf","./objects":"Vk9b","./strings":"EYbI","./datetime":"gcXW","./numbers":"ly4K","./urls":"HMUh","./dom":"fRxd","./pagination":"vktu","./api-request":"i59R","./version":"RvaL","./water-mark":"IRJd","./image-api":"iRxa","./slack":"exY1"}]},{},["Focm"], null)
